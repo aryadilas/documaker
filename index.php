@@ -178,8 +178,8 @@ $template->setValues([
             <a href="" class="btn-purple-border">Tutorial</a>
             <a href="assets/document/Template.docx" class="btn-purple-border">Contoh Template</a>
             <a href="assets/document/Datalist.xlsx" class="btn-purple-border">Contoh Datalist</a>
-            <a href="" class="btn-purple-border">Contoh Template 2</a>
-            <a href="" class="btn-purple-border">Contoh Datalist 2</a>
+            <!-- <a href="" class="btn-purple-border">Contoh Template 2</a>
+            <a href="" class="btn-purple-border">Contoh Datalist 2</a> -->
         </div>
         <form action="function.php" method="POST" enctype="multipart/form-data">
             <div class="input-section">

@@ -1,18 +1,28 @@
 <?php 
+$token = bin2hex(random_bytes(5));
+
 require 'vendor/autoload.php';
 $template = $_FILES['template']['name'];
-$datalist = $_FILES['datalist']['name'];
+$temp = $_FILES['template']['tmp_name'];
 
+$datalist = $_FILES['datalist']['name'];
+$data = $_FILES['datalist']['tmp_name'];
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-$spreadsheet = $reader->load($datalist);
-//$d=$spreadsheet->getSheet(0)->toArray();
+use DocxMerge\DocxMerge;
+
+
+
+
+$reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
+
+$spreadsheet = $reader->load($data);
+
 $i = 0;
 $colName = [];
 $merge = [];
 $sheetData = $spreadsheet->getActiveSheet()->toArray();
-use DocxMerge\DocxMerge;
-$token = bin2hex(random_bytes(5));
+
+
 function makeDir($path){
     if(!is_dir($path)){
         mkdir('process/'.$path);
@@ -21,6 +31,7 @@ function makeDir($path){
         makeDir(bin2hex(random_bytes(5)));
     }    
 }
+
 function deleteDir($dirPath) {
     if (! is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory");
@@ -38,8 +49,9 @@ function deleteDir($dirPath) {
     }
     rmdir($dirPath);
 }
+
 $dir = makeDir($token);
-//mkdir('process/1');
+
 foreach($sheetData as $col){
     if($i == 0){
         $colName = $col;
@@ -54,7 +66,7 @@ foreach($sheetData as $col){
         $template->saveAs('process/'.$i.'.docx');*/
 
         $dm = new DocxMerge();
-        $dm->setValues($template,
+        $dm->setValues($temp,
                 $dir.$i.'.docx',
                 $value);
         array_push($merge, $dir.$i.'.docx');
@@ -64,16 +76,11 @@ foreach($sheetData as $col){
     
     $i++;
 }
-//echo var_dump($merge);
-//use DocxMerge\DocxMerge;
-//$dm = new DocxMerge();
+
 $dm->merge( $merge, $dir.$template );
 
-
-
-//$filename='result.docx';
 $file_path=$dir.$template;
-//$ctype="application/octet-stream";
+
 if(!empty($file_path) && file_exists($file_path)){ /*check keberadaan file*/
    /*
    
